@@ -1,0 +1,83 @@
+How to Connect Your Portfolio Contact Form with EmailJS
+======================================================
+
+Author: Shikher Rai
+
+This guide explains how to connect your portfolio's contact form to EmailJS so that form submissions are sent directly to your email.
+
+---
+
+Step 1: Create an EmailJS Account
+---------------------------------
+1. Go to https://www.emailjs.com/ and sign up for a free account.
+2. After logging in, add an email service (e.g., Gmail, Outlook) in the Email Services section.
+
+Step 2: Create an Email Template
+-------------------------------
+1. In your EmailJS dashboard, go to the "Email Templates" section.
+2. Create a new template and note the variable names (e.g., fullname, email, message).
+3. Save your template and note the Template ID.
+
+Step 3: Get Your EmailJS Credentials
+------------------------------------
+You will need:
+- Service ID (from Email Services)
+- Template ID (from Email Templates)
+- Public Key (from Account > API Keys)
+
+Step 4: Add EmailJS Script to Your HTML
+---------------------------------------
+Add the following line before the closing </body> tag in your index.html:
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+Step 5: Update Your Contact Form
+-------------------------------
+Add an id to your form for easy selection:
+
+<form id="contact-form" class="form" data-form>
+  <!-- form fields -->
+</form>
+
+Step 6: Integrate EmailJS in Your JavaScript
+--------------------------------------------
+At the end of your assets/js/script.js file, add:
+
+(function() {
+  emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your EmailJS public key
+
+  const contactForm = document.getElementById('contact-form');
+  if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', this)
+        .then(function() {
+          alert('Message sent successfully!');
+          contactForm.reset();
+        }, function(error) {
+          alert('Failed to send message. Please try again.');
+        });
+    });
+  }
+})();
+
+Replace YOUR_PUBLIC_KEY, YOUR_SERVICE_ID, and YOUR_TEMPLATE_ID with your actual EmailJS credentials.
+
+Step 7: Match Form Field Names
+-----------------------------
+Ensure your form fields use the same name attributes as your EmailJS template variables:
+- name="fullname"
+- name="email"
+- name="message"
+
+Step 8: Test the Form
+---------------------
+1. Open your portfolio site in a browser.
+2. Fill out the contact form and submit.
+3. Check your email for the message.
+
+---
+
+Done!
+Your contact form is now connected to EmailJS and will send submissions to your email
